@@ -45,13 +45,43 @@ class Logic:
 
         return endArray
 
-    def checkParity(bits:List[Text]):
-        return [
-                str((Checks.Q1_1Check(bits), Checks.Q1_2Check(bits))),
-                str((Checks.Q2_1Check(bits), Checks.Q2_2Check(bits))),
-                str((Checks.Q3_1Check(bits), Checks.Q3_2Check(bits))),
-                str((Checks.Q4_1Check(bits), Checks.Q4_2Check(bits)))
-                ]
+    def detectError(bits:List[Text]):
+        #Used to for the animate to know what check found an error 
+        #False means check 1, true means check 2
+        checkResults = [False, False, False, False]
+        Q1PotentialPositions = []
+        Q2PotentialPositions = []
+        Q3PotentialPositions = []
+        Q4PotentialPositions = []
+        if(not Checks.Q1_1Check(bits)):
+            Q1PotentialPositions = [1, 3, 5, 7, 9, 11, 13, 15]
+        elif(not Checks.Q1_1Check(bits)):
+            Q1PotentialPositions = [0, 2, 4, 6, 8, 10, 12, 14]
+            checkResults[0] = True
+
+        if(not Checks.Q2_1Check(bits)):
+            Q2PotentialPositions = [2, 3, 6, 7, 10, 11, 14, 15]
+        elif(not Checks.Q2_2Check(bits)):
+            Q2PotentialPositions = [0, 1, 4, 5, 8, 9, 12, 13]
+            checkResults[1] = True
+
+        if(not Checks.Q3_1Check(bits)):
+            Q3PotentialPositions = [4, 5, 6, 7, 12, 13, 14, 15]
+        elif(not Checks.Q3_2Check(bits)):
+            Q3PotentialPositions = [0, 1, 2, 3, 8, 9, 10, 11]
+            checkResults[2] = True
+
+        if(not Checks.Q4_1Check(bits)):
+            Q4PotentialPositions = [8, 9, 10, 11, 12, 13, 14, 15]
+        elif(not Checks.Q4_2Check(bits)):
+            Q4PotentialPositions = [0, 1, 2, 3, 4, 5, 6, 7]
+            checkResults[3] = True
+
+        errorLocation = set(Q1PotentialPositions).intersection(Q2PotentialPositions, Q3PotentialPositions, Q4PotentialPositions)
+        return (errorLocation, checkResults)
+
+        
+
     
 class Checks:
     #region Column Checks
@@ -64,9 +94,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return True
-        else:
             return False
+        else:
+            return True
 
     def Q1_2Check(bits):
         parity = 0
@@ -76,9 +106,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return True
-        else:
             return False
+        else:
+            return True
 
     def Q2_1Check(bits):
         parity = 0
@@ -88,9 +118,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return True
-        else:
             return False
+        else:
+            return True
 
     def Q2_2Check(bits):
         parity = 0
@@ -100,9 +130,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return True
-        else:
             return False
+        else:
+            return True
 
     #endregion
 
@@ -117,9 +147,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return True
-        else:
             return False
+        else:
+            return True
 
     def Q3_2Check(bits):
         parity = 0
@@ -129,9 +159,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return True
-        else:
             return False
+        else:
+            return True
 
     def Q4_1Check(bits):
         parity = 0
@@ -141,9 +171,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return True
-        else:
             return False
+        else:
+            return True
 
     def Q4_2Check(bits):
         parity = 0
@@ -153,9 +183,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return True
-        else:
             return False
+        else:
+            return True
 
     #endregion
 
@@ -176,5 +206,6 @@ if __name__ == "__main__":
     ]
 
     Logic.convertTo16Bits(bits)
-
-    print(Logic.calculateParityBits(bits))
+    bits = Logic.calculateParityBits(bits)
+    bits[5].text = 1
+    print(Logic.detectError(bits))
