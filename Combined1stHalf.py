@@ -8,63 +8,11 @@ import scipy
 import sympy
 import math, random, statistics, itertools, functools, collections
 import datetime, decimal, fractions, re, string
+from Animations import HighlightAnimations
+from Logic import Logic
 
 class Combined1stHalf(Scene):
-
-
-    def animate_step(self, yellow=None, green=None, red=None, clear=None):
-        anims = []
-
-        if yellow:
-            anims.extend([
-                self.bit_boxes[i].animate.set_fill(YELLOW, opacity=0.6)
-                for i in yellow
-            ])
-
-        if green:
-            anims.extend([
-                self.bit_boxes[i].animate.set_fill(GREEN, opacity=0.6)
-                for i in green
-            ])
-
-        if red:
-            anims.extend([
-                self.bit_boxes[i].animate.set_fill(RED, opacity=0.6)
-                for i in red
-            ])
-
-        if clear:
-            anims.extend([
-                self.bit_boxes[i].animate.set_fill(RED, opacity=0.0)
-                for i in clear
-            ])
-
-        # Step A: Play background highlighting/clearing animations
-        if anims:
-            self.play(*anims)
-
-        # Step B: Delay while red/yellow squares are highlighted
-        if yellow and red:
-            self.wait(1.0)  # Pause to let the viewer see the highlighted red squares
-
-            # Calculate parity value
-            parity_value = sum(self.grid_values[i] for i in red) % 2
-            target_box_index = yellow[0]
-            self.grid_values[target_box_index] = parity_value
-
-            # Spawn bit text on the right side of the screen
-            parity_text = Text(
-                str(parity_value), font_size=30, color=WHITE
-            ).move_to([5.5, 0, 0])
-
-            # Animate bit sliding in from the right into the target yellow square
-            self.play(
-                FadeIn(parity_text, run_time=0.2),
-                parity_text.animate.move_to(self.bit_boxes[target_box_index]),
-                run_time=0.8,
-            )
-
-        self.wait(0.5)
+    bitsVgroup = []
 
     def construct(self):
         # Tracking values in grid positions 0 to 15
@@ -86,6 +34,8 @@ class Combined1stHalf(Scene):
             "(15, 11) hamming code", font_size=24
         ).move_to([4, 3.5, 0])
         raw_bits_str = "10110101011"
+        for bit in raw_bits_str:
+            self.bitsVgroup.append(Text(bit))
         bits = Text(raw_bits_str, font_size=30).move_to([4.5, 0.5, 0])
         bits_display = Text(raw_bits_str, font_size=30).move_to([4.5, 0.5, 0])
 
@@ -169,40 +119,146 @@ class Combined1stHalf(Scene):
         self.wait(2)  # Delay before starting calculations
 
         # -----------------------------------
-        # HAMMING CODE STEPS (PARITY CALCULATION)
+        # region HAMMING CODE STEPS (PARITY CALCULATION)
         # -----------------------------------
 
         # Step 1: Parity Bit 1 (Pos 1)
-        self.animate_step(yellow=[1], red=[3, 5, 7, 9, 11, 13, 15])
+        HighlightAnimations.animate_step(self, yellow=[1], red=[3, 5, 7, 9, 11, 13, 15], opac=0.6, wait_time=0.5)
 
-        self.animate_step(green=[1], clear=[3, 5, 7, 9, 11, 13, 15])
+        HighlightAnimations.animate_step(self, green=[1], clear=[3, 5, 7, 9, 11, 13, 15], opac=0.6, wait_time=0.5)
 
         # Step 2: Parity Bit 2 (Pos 2)
-        self.animate_step(
-            yellow=[2], green=[1], red=[3, 6, 7, 10, 11, 14, 15]
+        HighlightAnimations.animate_step(
+            self, yellow=[2], green=[1], red=[3, 6, 7, 10, 11, 14, 15], opac=0.6, wait_time=0.5
         )
 
-        self.animate_step(green=[1, 2], clear=[3, 6, 7, 10, 11, 14, 15])
+        HighlightAnimations.animate_step(self, green=[1, 2], clear=[3, 6, 7, 10, 11, 14, 15], opac=0.6, wait_time=0.5)
 
         # Step 3: Parity Bit 4 (Pos 4)
-        self.animate_step(
-            yellow=[4], green=[1, 2], red=[5, 6, 7, 12, 13, 14, 15]
+        HighlightAnimations.animate_step(
+            self, yellow=[4], green=[1, 2], red=[5, 6, 7, 12, 13, 14, 15], opac=0.6, wait_time=0.5
         )
 
-        self.animate_step(green=[1, 2, 4], clear=[5, 6, 7, 12, 13, 14, 15])
+        HighlightAnimations.animate_step(self, green=[1, 2, 4], clear=[5, 6, 7, 12, 13, 14, 15], opac=0.6, wait_time=0.5)
 
         # Step 4: Parity Bit 8 (Pos 8)
-        self.animate_step(
-            yellow=[8], green=[1, 2, 4], red=[9, 10, 11, 12, 13, 14, 15]
+        HighlightAnimations.animate_step(
+            self, yellow=[8], green=[1, 2, 4], red=[9, 10, 11, 12, 13, 14, 15], opac=0.6, wait_time=0.5
         )
 
-        self.animate_step(
-            green=[1, 2, 4, 8], clear=[9, 10, 11, 12, 13, 14, 15]
+        HighlightAnimations.animate_step(
+            self, green=[1, 2, 4, 8], clear=[9, 10, 11, 12, 13, 14, 15], opac=0.6, wait_time=0.5
         )
 
         # Step 5: Overall Parity Bit 0 (Pos 0)
-        self.animate_step(
-            yellow=[0], green=[1], red=[2, 4, 6, 8, 10, 12, 14]
+        HighlightAnimations.animate_step(
+            self, yellow=[0], green=[1], red=[2, 4, 6, 8, 10, 12, 14], opac=0.6, wait_time=0.5
         )
 
-        self.animate_step(green=[0, 1, 2, 4, 8], clear=[6, 10, 12, 14])
+        HighlightAnimations.animate_step(self, green=[0, 1, 2, 4, 8], clear=[6, 10, 12, 14], opac=0.6, wait_time=0.5)
+        self.play(FadeOut(even_rule_message))
+        self.play(FadeOut(calc_message))
+        #endregion
+        self.bitsVgroup = VGroup(self.bitsVgroup)
+
+        '''This is where the bit needs to be flipped'''
+        print(f"bit at index 13 is {self.bitsVgroup[13]}")
+        self.bitsVgroup[13] = Text(str(1))
+
+        #region Error Detection
+        errorCheckResults = Logic.detectError(self.bitsVgroup)
+        potentialBits1 = []
+        
+        explanationText = Text("To find the error we will begin by\n checking the parity of columns 1 and 3"
+                               , font_size=24).move_to([3, 3.5, 0])
+        self.play(FadeIn(explanationText))
+        self.wait(5)
+        newExplanationText = Text("To do so we will count up the 1s within the red boxes\n and then check whether adding\n the orange box results in an even number", 
+                                  font_size=24).move_to([3, 3.5, 0])
+        self.play(FadeTransform(explanationText, newExplanationText))
+        explanationText = newExplanationText
+        self.wait(5)
+        
+        newExplanationText = Text("If it is even then there is no error",
+                                  font_size=24).move_to([3, 3.5, 0])
+        self.play(FadeTransform(explanationText, newExplanationText))
+        explanationText = newExplanationText
+        if(errorCheckResults[1][0]):
+            HighlightAnimations.highlightQ1_2(scene=self)
+            potentialBits1 = [0, 2, 4, 6, 8, 10, 12, 14]
+        else:
+            HighlightAnimations.highlightQ1_2(scene=self)
+            self.wait(3)
+            newExplanationText = Text("Since the error wasn't found we will check\n the parity of the remaining columns",
+                                      font_size=24).move_to([3, 3.5, 0])
+            self.play(FadeTransform(explanationText, newExplanationText))
+            explanationText = newExplanationText
+            self.wait(3)
+            HighlightAnimations.highlightQ1_1(scene=self)
+            potentialBits1 =  [1, 3, 5, 7, 9, 11, 13, 15]
+        
+        newExplanationText= Text("Now we will check the two left\n most columns for an error",
+                                 font_size=24).move_to([3, 3.5, 0])
+        self.play(FadeTransform(explanationText, newExplanationText))
+        explanationText = newExplanationText
+        self.wait(3)
+        if(errorCheckResults[1][1]):
+            HighlightAnimations.highlightQ2_2(scene=self, potentialBits=potentialBits1)
+            potentialBits1 = set(potentialBits1).intersection([0, 1, 4, 5, 8, 9, 12, 13])
+        else:
+            HighlightAnimations.highlightQ2_2(scene=self, potentialBits=potentialBits1)
+            self.wait(3)
+            newExplanationText = Text("Since the error wasn't found\n we will check\n the parity of the remaining columns",
+                                      font_size=24).move_to([3, 3.5, 0])
+            self.play(FadeTransform(explanationText, newExplanationText))
+            explanationText = newExplanationText
+            self.wait(3)
+            HighlightAnimations.highlightQ2_1(scene=self,potentialBits=potentialBits1)
+            potentialBits1 = set(potentialBits1).intersection([2, 3, 6, 7, 10, 11, 14, 15])
+        
+        HighlightAnimations.animate_step(scene=self, yellow = potentialBits1, opac=0.5)
+        
+        newExplanationText = Text("Now we will perform similiar checks on the rows of the grid\n starting with row 1 and 3",
+                                    font_size=24).move_to([3, 3.5, 0])
+        self.play(FadeTransform(explanationText, newExplanationText))
+        explanationText = newExplanationText
+        self.wait(3)
+        
+        potentialBits2 = []
+        if(errorCheckResults[1][2]):
+            HighlightAnimations.highlightQ3_2(scene=self, potentialBits= potentialBits1)
+            potentialBits2 = [0, 1, 2, 3, 8, 9, 10, 11]
+        else:
+            HighlightAnimations.highlightQ3_2(scene=self, potentialBits= potentialBits1)
+            newExplanationText = Text("Since the error wasn't found we will check\n the parity of the remaining rows",
+                                      font_size=24).move_to([3, 3.5, 0])
+            self.play(FadeTransform(explanationText, newExplanationText))
+            explanationText = newExplanationText
+            self.wait(3)
+            HighlightAnimations.highlightQ3_1(scene=self, potentialBits= potentialBits1)
+            potentialBits2 = [4, 5, 6, 7, 12, 13, 14, 15]
+        
+        newExplanationText = Text("Now we will perform checks on rows 1 and 2",
+                                              font_size=24).move_to([3, 3.5, 0])
+        self.play(FadeTransform(explanationText, newExplanationText))
+        explanationText = newExplanationText
+        if(errorCheckResults[1][3]):
+            HighlightAnimations.highlightQ4_2(scene=self, potentialBits=potentialBits1)
+            potentialBits2 = set(potentialBits2).intersection([0, 1, 2, 3, 4, 5, 6, 7])
+        else:
+            HighlightAnimations.highlightQ4_2(scene=self, potentialBits=potentialBits1)
+            newExplanationText = Text("Since the error wasn't found we will check\n the parity of the remaining rows",
+                                      font_size=24).move_to([3, 3.5, 0])
+            self.play(FadeTransform(explanationText, newExplanationText))
+            explanationText = newExplanationText
+            self.wait(3)
+            HighlightAnimations.highlightQ4_1(scene=self, potentialBits=potentialBits1)
+            potentialBits2 = set(potentialBits2).intersection([8, 9, 10, 11, 12, 13, 14, 15])
+        
+        HighlightAnimations.animate_step(scene=self, yellow = potentialBits2, opac=0.5)
+        self.wait(2)
+        
+        HighlightAnimations.animate_step(scene=self, green = errorCheckResults[0], clear=(potentialBits1.union(potentialBits2)).difference(errorCheckResults[0]), opac=.5)
+        self.wait(5)
+
+        #endregion

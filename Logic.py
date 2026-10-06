@@ -55,7 +55,7 @@ class Logic:
         Q4PotentialPositions = []
         if(not Checks.Q1_1Check(bits)):
             Q1PotentialPositions = [1, 3, 5, 7, 9, 11, 13, 15]
-        elif(not Checks.Q1_1Check(bits)):
+        elif(not Checks.Q1_2Check(bits)):
             Q1PotentialPositions = [0, 2, 4, 6, 8, 10, 12, 14]
             checkResults[0] = True
 
@@ -94,9 +94,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return False
-        else:
             return True
+        else:
+            return False
 
     def Q1_2Check(bits):
         parity = 0
@@ -106,9 +106,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return False
-        else:
             return True
+        else:
+            return False
 
     def Q2_1Check(bits):
         parity = 0
@@ -118,9 +118,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return False
-        else:
             return True
+        else:
+            return False
 
     def Q2_2Check(bits):
         parity = 0
@@ -130,9 +130,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return False
-        else:
             return True
+        else:
+            return False
 
     #endregion
 
@@ -147,9 +147,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return False
-        else:
             return True
+        else:
+            return False
 
     def Q3_2Check(bits):
         parity = 0
@@ -159,9 +159,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return False
-        else:
             return True
+        else:
+            return False
 
     def Q4_1Check(bits):
         parity = 0
@@ -171,9 +171,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return False
-        else:
             return True
+        else:
+            return False
 
     def Q4_2Check(bits):
         parity = 0
@@ -183,9 +183,9 @@ class Checks:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
-            return False
-        else:
             return True
+        else:
+            return False
 
     #endregion
 
