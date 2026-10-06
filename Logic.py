@@ -15,7 +15,8 @@ class Logic:
 
         return elevenBits
 
-    def calculateParityBits(bits:List[Text]):
+    #Unused method for parity bit calculation, kept for reference
+    '''def calculateParityBits(bits:List[Text]):
         endArray = deepcopy(bits)
 
         #Calculates P1
@@ -43,7 +44,7 @@ class Logic:
 
         endArray[0] = Text(str(parity % 2))
 
-        return endArray
+        return endArray'''
 
     def detectError(bits:List[Text]):
         #Used to for the animate to know what check found an error 

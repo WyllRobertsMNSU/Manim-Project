@@ -24,11 +24,13 @@ class HighlightAnimations():
         if clear:
             clear = set(clear).difference(potentialBits)
             anims.extend([scene.bit_boxes[i].animate.set_fill(RED, opacity=0) for i in clear])
+
         #Keeps the potential bits highlighted yellow when clearing
         if potentialBits:
             anims.extend([scene.bit_boxes[i].animate.set_fill(YELLOW, opacity=opac) for i in potentialBits])
         scene.play(*anims)
 
+        #Used for the parity bit calculation animation, sets the parity bit to the correct value
         if yellow and red:
             scene.wait(1.0)
             parity_value = sum(scene.grid_values[i] for i in red) % 2
