@@ -160,17 +160,11 @@ class HammingCode(Scene):
         self.play(FadeOut(even_rule_message))
         self.play(FadeOut(calc_message))
         #endregion
-<<<<<<< Updated upstream
-        self.bitsVgroup = VGroup(self.bitsVgroup)
-
-        '''This is where the bit needs to be flipped'''
-=======
         self.bitsVgroup = VGroup(*self.bitsVgroup)
-        target_bit = self.bitsVgroup[10]
-        self.play(flip_bit(target_bit))
->>>>>>> Stashed changes
-        print(f"bit at index 13 is {self.bitsVgroup[13]}")
-        self.bitsVgroup[13] = Text(str(1))
+        #target_bit = self.bitsVgroup[10]
+        #self.play(flip_bit(target_bit))
+        #print(f"bit at index 13 is {self.bitsVgroup[13]}")
+        #self.bitsVgroup[13] = Text(str(1))
 
         #region Error Detection
         errorCheckResults = Logic.detectError(self.bitsVgroup)
@@ -266,6 +260,10 @@ class HammingCode(Scene):
         self.wait(2)
         
         HighlightAnimations.animate_step(scene=self, green = errorCheckResults[0], clear=(potentialBits1.union(potentialBits2)).difference(errorCheckResults[0]), opac=.5)
+        if not errorCheckResults[0]:
+            noErrorText = Text("No error was found", font_size=24).move_to([3, 3.5, 0])
+            self.play(FadeTransform(explanationText, noErrorText))
+            explanationText = noErrorText
         self.wait(5)
         self.play(FadeOut(explanationText))
         #endregion
