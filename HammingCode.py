@@ -8,7 +8,7 @@ import scipy
 import sympy
 import math, random, statistics, itertools, functools, collections
 import datetime, decimal, fractions, re, string
-from Animations import HighlightAnimations
+from Animations import HighlightAnimations, flip_bit
 from Logic import Logic
 
 class HammingCode(Scene):
@@ -160,8 +160,8 @@ class HammingCode(Scene):
         self.play(FadeOut(calc_message))
         #endregion
         self.bitsVgroup = VGroup(self.bitsVgroup)
-
-        '''This is where the bit needs to be flipped'''
+        target_bit = self.bitsVgroup[10]
+        self.play(flip_bit(target_bit))
         print(f"bit at index 13 is {self.bitsVgroup[13]}")
         self.bitsVgroup[13] = Text(str(1))
 
