@@ -43,7 +43,7 @@ class HighlightAnimations():
                 parity_text.animate.move_to(scene.bit_boxes[target_box_index]),
                 run_time=0.8,
             )
-            scene.bitsVgroup.insert(target_box_index, parity_text)
+            scene.bitsVgroup[target_box_index] = parity_text
 
         if wait_time:
             scene.wait(wait_time)

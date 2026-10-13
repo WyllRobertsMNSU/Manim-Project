@@ -36,6 +36,7 @@ class HammingCode(Scene):
         raw_bits_str = "10110101011"
         for bit in raw_bits_str:
             self.bitsVgroup.append(Text(bit))
+        Logic.convertTo16Bits(self.bitsVgroup)
         bits = Text(raw_bits_str, font_size=30).move_to([4.5, 0.5, 0])
         bits_display = Text(raw_bits_str, font_size=30).move_to([4.5, 0.5, 0])
 
@@ -159,9 +160,15 @@ class HammingCode(Scene):
         self.play(FadeOut(even_rule_message))
         self.play(FadeOut(calc_message))
         #endregion
+<<<<<<< Updated upstream
         self.bitsVgroup = VGroup(self.bitsVgroup)
 
         '''This is where the bit needs to be flipped'''
+=======
+        self.bitsVgroup = VGroup(*self.bitsVgroup)
+        target_bit = self.bitsVgroup[10]
+        self.play(flip_bit(target_bit))
+>>>>>>> Stashed changes
         print(f"bit at index 13 is {self.bitsVgroup[13]}")
         self.bitsVgroup[13] = Text(str(1))
 
