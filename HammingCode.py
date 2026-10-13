@@ -465,18 +465,22 @@ class HammingCode(Scene):
             opac=.5,
         )
 
+        
+        HighlightAnimations.animate_step(scene=self, green = errorCheckResults[0], clear=(potentialBits1.union(potentialBits2)).difference(errorCheckResults[0]), opac=.5)
+        
+        if not errorCheckResults[0]:
+            noErrorText = Text("No error was found", font_size=24).move_to([3, 3.5, 0])
+            self.play(FadeTransform(explanationText, noErrorText))
+            explanationText = noErrorText
+        else:
+          explanationText = Text(
+                      f"An error was found at index {errorCheckResults[0]}\nWe will now flip the bit back",
+                      font_size=24,
+                  ).move_to([3, 3.5, 0])
+          self.play(FadeIn(explanationText))
+          flip_bit(self, self.bitsVgroup,list(errorCheckResults[0])[0])
+          
         self.wait(5)
-        self.play(FadeOut(explanationText))
-
-        explanationText = Text(
-                    f"An error was found at index {errorCheckResults[0]}\nWe will now flip the bit back",
-                    font_size=24,
-                ).move_to([3, 3.5, 0])
-        self.play(FadeIn(explanationText))
-        flip_bit(self, self.bitsVgroup,list(errorCheckResults[0])[0])
-
-        self.wait(3)
-
         self.play(FadeOut(explanationText))
         
         #endregion
