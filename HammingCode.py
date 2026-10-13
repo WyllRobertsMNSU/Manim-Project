@@ -14,12 +14,14 @@ from Logic import Logic
 
 
 class HammingCode(Scene):
-    BIT_TO_FLIP = 10
+    BIT_TO_FLIP = None
     bitsVgroup = []
 
     def construct(self):
+        self.bitsVgroup = []
         # Tracking values in grid positions 0 to 15
         self.grid_values = [0] * 16
+        self.parity_texts = {}
 
         bitBoxes = VGroup(*[Square(side_length=1) for _ in range(16)])
         bitBoxes.arrange_in_grid(rows=4, cols=4)
@@ -241,6 +243,15 @@ class HammingCode(Scene):
         self.play(FadeOut(even_rule_message))
         self.play(FadeOut(calc_message))
 
+        ordered = [None] * 16
+        for bit_idx, box_idx in bit_box_index_map.items():
+            ordered[box_idx] = self.bitsVgroup[bit_idx]
+        for box_idx in (0, 1, 2, 4, 8):
+            ordered[box_idx] = self.parity_texts.get(box_idx) or Text(
+                str(self.grid_values[box_idx]), font_size=30
+            ).move_to(bitBoxes[box_idx].get_center())
+        self.bitsVgroup = VGroup(*ordered)
+
         #endregion
 
         #region insert error
@@ -287,7 +298,7 @@ class HammingCode(Scene):
         self.play(FadeTransform(explanationText, newExplanationText))
         explanationText = newExplanationText
 
-        if errorCheckResults[1]:
+        if errorCheckResults[1][0]:
             HighlightAnimations.highlightQ1_2(scene=self)
             potentialBits1 = [0, 2, 4, 6, 8, 10, 12, 14]
         else:
@@ -319,7 +330,7 @@ class HammingCode(Scene):
 
         self.wait(3)
 
-        if errorCheckResults[1]:
+        if errorCheckResults[1][1]:
             HighlightAnimations.highlightQ2_2(
                 scene=self,
                 potentialBits=potentialBits1,
@@ -374,7 +385,7 @@ class HammingCode(Scene):
 
         potentialBits2 = []
 
-        if errorCheckResults[1]:
+        if errorCheckResults[1][2]:
             HighlightAnimations.highlightQ3_2(
                 scene=self,
                 potentialBits=potentialBits1,
@@ -413,7 +424,7 @@ class HammingCode(Scene):
         self.play(FadeTransform(explanationText, newExplanationText))
         explanationText = newExplanationText
 
-        if errorCheckResults[1]:
+        if errorCheckResults[1][3]:
             HighlightAnimations.highlightQ4_2(
                 scene=self,
                 potentialBits=potentialBits1,
@@ -438,7 +449,7 @@ class HammingCode(Scene):
             explanationText = newExplanationText
 
             self.wait(3)
-
+            self.play(FadeOut(explanationText))
             HighlightAnimations.highlightQ4_1(
                 scene=self,
                 potentialBits=potentialBits1,
