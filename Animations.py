@@ -88,13 +88,23 @@ class HighlightAnimations():
         scene.wait(HIGHLIGHT_TIME)
         HighlightAnimations.animate_step(scene, clear=[0, 1, 2, 3, 4, 5, 6, 7],potentialBits=potentialBits, opac=.5)
 
-def flip_bit(bit: Text):
-    if bit == "1":
-        new_bit = Text("0", font_size=bit.font_size)
-    else:
-        new_bit = Text("1", font_size=bit.font_size)
-    new_bit.move_to(bit.get_center())
-    return Transform(bit, new_bit)
+def flip_bit(scene, bits_vgroup, index):
+    old_bit = bits_vgroup[index]
+
+    new_value = "0" if old_bit.text == "1" else "1"
+
+    new_bit = Text(
+        new_value,
+        font_size=old_bit.font_size
+    ).move_to(old_bit.get_center())
+
+    scene.play(
+        ReplacementTransform(old_bit, new_bit)
+    )
+
+    bits_vgroup[index] = new_bit
+
+    return new_bit
 
     
         
