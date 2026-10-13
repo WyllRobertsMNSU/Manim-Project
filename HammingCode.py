@@ -14,7 +14,7 @@ from Logic import Logic
 
 
 class HammingCode(Scene):
-    BIT_TO_FLIP = None
+    BIT_TO_FLIP = 10
     bitsVgroup = []
 
     def construct(self):
@@ -255,16 +255,17 @@ class HammingCode(Scene):
         #endregion
 
         #region insert error
-        explanationText = Text(
-                    f"We will now insert an error at position {self.BIT_TO_FLIP}",
-                    font_size=24,
-                ).move_to([3, 3.5, 0])
-        self.play(FadeIn(explanationText))
-        flip_bit(self, self.bitsVgroup, self.BIT_TO_FLIP)
+        if self.BIT_TO_FLIP is not None:
+            explanationText = Text(
+                f"We will now insert an error at position {self.BIT_TO_FLIP}",
+                font_size=24,
+            ).move_to([3, 3.5, 0])
+            self.play(FadeIn(explanationText))
+            flip_bit(self, self.bitsVgroup, self.BIT_TO_FLIP)
 
-        self.wait(3)
+            self.wait(3)
 
-        self.play(FadeOut(explanationText))
+            self.play(FadeOut(explanationText))
         #endregion
 
         #region Error Detection
