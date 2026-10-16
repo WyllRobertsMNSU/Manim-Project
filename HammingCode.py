@@ -12,9 +12,15 @@ import datetime, decimal, fractions, re, string
 from Animations import HighlightAnimations, flip_bit
 from Logic import Logic
 
+#Bit index if a 16 bit array to flip
+BIT_TO_FLIP = 11
+
+#11 bit string to perform to calculate the parity of
+BIT_STR = "10110101011"
 
 class HammingCode(Scene):
-    BIT_TO_FLIP = 10
+    
+
     bitsVgroup = []
 
     def construct(self):
@@ -39,12 +45,10 @@ class HammingCode(Scene):
             "(15, 11) hamming code", font_size=24
         ).move_to([4, 3.5, 0])
 
-        raw_bits_str = "10110101011"
-
         self.bitsVgroup = VGroup(
             *[
                 Text(bit, font_size=30)
-                for bit in raw_bits_str
+                for bit in BIT_STR
             ]
         )
 
@@ -52,7 +56,7 @@ class HammingCode(Scene):
         self.bitsVgroup.move_to([4.5, 0.5, 0])
 
         bits_display = Text(
-            raw_bits_str,
+            BIT_STR,
             font_size=30
         ).move_to([4.5, 0.5, 0])
 
@@ -92,7 +96,7 @@ class HammingCode(Scene):
 
         # Populate tracked values from raw input string
         for bit_idx, box_idx in bit_box_index_map.items():
-            self.grid_values[box_idx] = int(raw_bits_str[bit_idx])
+            self.grid_values[box_idx] = int(BIT_STR[bit_idx])
 
         self.play(FadeOut(function_message))
 
@@ -251,17 +255,18 @@ class HammingCode(Scene):
                 str(self.grid_values[box_idx]), font_size=30
             ).move_to(bitBoxes[box_idx].get_center())
         self.bitsVgroup = VGroup(*ordered)
-
+        HighlightAnimations.animate_step(self, clear=[0,1,2,4,8])
         #endregion
 
         #region insert error
-        if self.BIT_TO_FLIP is not None:
+        if BIT_TO_FLIP is not None:
             explanationText = Text(
-                f"We will now insert an error at position {self.BIT_TO_FLIP}",
+                f"We will now insert an error at position {BIT_TO_FLIP}",
                 font_size=24,
             ).move_to([3, 3.5, 0])
             self.play(FadeIn(explanationText))
-            flip_bit(self, self.bitsVgroup, self.BIT_TO_FLIP)
+            self.play(Indicate(bitBoxes[BIT_TO_FLIP]))
+            flip_bit(self, self.bitsVgroup, BIT_TO_FLIP)
 
             self.wait(3)
 
@@ -368,6 +373,9 @@ class HammingCode(Scene):
                 [2, 3, 6, 7, 10, 11, 14, 15]
             )
 
+        #Highlights the column the error is in
+        if(errorCheckResults[0] == set({})):
+            potentialBits1 = set({})
         HighlightAnimations.animate_step(
             scene=self,
             yellow=potentialBits1,
@@ -460,6 +468,9 @@ class HammingCode(Scene):
                 [8, 9, 10, 11, 12, 13, 14, 15]
             )
 
+        #Highlights the row the error is in
+        if(errorCheckResults[0] == set({})):
+            potentialBits2 = set({})
         HighlightAnimations.animate_step(
             scene=self,
             yellow=potentialBits2,

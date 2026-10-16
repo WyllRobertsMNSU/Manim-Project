@@ -4,6 +4,14 @@ from typing import List
 from enum import Enum
 from copy import deepcopy
 
+Q1_1 = [1, 3, 5, 7, 9, 11, 13, 15]
+Q1_2 = [0, 2, 4, 6, 8, 10, 12, 14]
+Q2_1 = [2, 3, 6, 7, 10, 11, 14, 15]
+Q2_2 = [0, 1, 4, 5, 8, 9, 12, 13]
+Q3_1 = [4, 5, 6, 7, 12, 13, 14, 15]
+Q3_2 = [0, 1, 2, 3, 8, 9, 10, 11]
+Q4_1 = [8, 9, 10, 11, 12, 13, 14, 15]
+Q4_2 = [0, 1, 2, 3, 4, 5, 6, 7]
 
 class Logic:
     def convertTo16Bits(elevenBits:List[Text]):
@@ -54,142 +62,44 @@ class Logic:
         Q2PotentialPositions = []
         Q3PotentialPositions = []
         Q4PotentialPositions = []
-        if(not Checks.Q1_1Check(bits)):
-            Q1PotentialPositions = [1, 3, 5, 7, 9, 11, 13, 15]
-        elif(not Checks.Q1_2Check(bits)):
-            Q1PotentialPositions = [0, 2, 4, 6, 8, 10, 12, 14]
+        if(not Logic.PerformCheck(Q1_1, bits)):
+            Q1PotentialPositions = Q1_1
+        elif(not Logic.PerformCheck(Q1_2, bits)):
+            Q1PotentialPositions = Q1_2
             checkResults[0] = True
 
-        if(not Checks.Q2_1Check(bits)):
-            Q2PotentialPositions = [2, 3, 6, 7, 10, 11, 14, 15]
-        elif(not Checks.Q2_2Check(bits)):
-            Q2PotentialPositions = [0, 1, 4, 5, 8, 9, 12, 13]
+        if(not Logic.PerformCheck(Q2_1, bits)):
+            Q2PotentialPositions = Q2_1
+        elif(not Logic.PerformCheck(Q2_2, bits)):
+            Q2PotentialPositions = Q2_2
             checkResults[1] = True
 
-        if(not Checks.Q3_1Check(bits)):
-            Q3PotentialPositions = [4, 5, 6, 7, 12, 13, 14, 15]
-        elif(not Checks.Q3_2Check(bits)):
-            Q3PotentialPositions = [0, 1, 2, 3, 8, 9, 10, 11]
+        if(not Logic.PerformCheck(Q3_1, bits)):
+            Q3PotentialPositions = Q3_1
+        elif(not Logic.PerformCheck(Q3_2, bits)):
+            Q3PotentialPositions = Q3_2
             checkResults[2] = True
 
-        if(not Checks.Q4_1Check(bits)):
-            Q4PotentialPositions = [8, 9, 10, 11, 12, 13, 14, 15]
-        elif(not Checks.Q4_2Check(bits)):
-            Q4PotentialPositions = [0, 1, 2, 3, 4, 5, 6, 7]
+        if(not Logic.PerformCheck(Q4_1, bits)):
+            Q4PotentialPositions = Q4_1
+        elif(not Logic.PerformCheck(Q4_2, bits)):
+            Q4PotentialPositions = Q4_2
             checkResults[3] = True
 
         errorLocation = set(Q1PotentialPositions).intersection(Q2PotentialPositions, Q3PotentialPositions, Q4PotentialPositions)
         return (errorLocation, checkResults)
 
-        
-
-    
-class Checks:
-    #region Column Checks
-
-    def Q1_1Check(bits):
+    def PerformCheck(checkType: list, bits):
         parity = 0
-
+        bitsToCheck = list(checkType)
         # Checks columns 1 and 3
-        for x in [1, 3, 5, 7, 9, 11, 13, 15]:
+        for x in bitsToCheck:
             parity += int(bits[x].text)
 
         if(parity % 2 == 0):
             return True
         else:
             return False
-
-    def Q1_2Check(bits):
-        parity = 0
-
-        # Checks columns 0 and 2
-        for x in [0, 2, 4, 6, 8, 10, 12, 14]:
-            parity += int(bits[x].text)
-
-        if(parity % 2 == 0):
-            return True
-        else:
-            return False
-
-    def Q2_1Check(bits):
-        parity = 0
-
-        # Checks columns 2 and 3
-        for x in [2, 3, 6, 7, 10, 11, 14, 15]:
-            parity += int(bits[x].text)
-
-        if(parity % 2 == 0):
-            return True
-        else:
-            return False
-
-    def Q2_2Check(bits):
-        parity = 0
-
-        # Checks columns 0 and 1
-        for x in [0, 1, 4, 5, 8, 9, 12, 13]:
-            parity += int(bits[x].text)
-
-        if(parity % 2 == 0):
-            return True
-        else:
-            return False
-
-    #endregion
-
-
-    #region Row Checks
-
-    def Q3_1Check(bits):
-        parity = 0
-
-        # Checks rows 1 and 3
-        for x in [4, 5, 6, 7, 12, 13, 14, 15]:
-            parity += int(bits[x].text)
-
-        if(parity % 2 == 0):
-            return True
-        else:
-            return False
-
-    def Q3_2Check(bits):
-        parity = 0
-
-        # Checks rows 0 and 2
-        for x in [0, 1, 2, 3, 8, 9, 10, 11]:
-            parity += int(bits[x].text)
-
-        if(parity % 2 == 0):
-            return True
-        else:
-            return False
-
-    def Q4_1Check(bits):
-        parity = 0
-
-        # Checks rows 2 and 3
-        for x in [8, 9, 10, 11, 12, 13, 14, 15]:
-            parity += int(bits[x].text)
-
-        if(parity % 2 == 0):
-            return True
-        else:
-            return False
-
-    def Q4_2Check(bits):
-        parity = 0
-
-        # Checks rows 0 and 1
-        for x in [0, 1, 2, 3, 4, 5, 6, 7]:
-            parity += int(bits[x].text)
-
-        if(parity % 2 == 0):
-            return True
-        else:
-            return False
-
-    #endregion
-
 
 if __name__ == "__main__":
     bits = [
